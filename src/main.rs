@@ -240,6 +240,15 @@ fn match_setting_time_str(local_time:DateTime<Local>, date_time:&String, standar
         let new_time = time_parser(date_time).expect(&err_msg);
 
         Clock::set(new_time);
+
+        let maybe_error = std::io::Error::last_os_error();
+        let os_error_code = &maybe_error.raw_os_error();
+
+        match os_error_code {
+            Some(0) => (),
+            None => (),
+            Some(_) => eprintln!("Unable to set the time: {:?}", maybe_error),
+        };
 }
 
 fn main() {
